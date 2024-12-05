@@ -36,27 +36,25 @@ REM_CFA returns an object of class "REM". The function \code{\link[=summary]{sum
 \item{summary_table}{summary of EM and REM estimates, SEs, Z statistics, p-values, and 95\% confidence intervals}
 }
 \description{
-This function uses the robust expectation maximization (REM) algorithm to estimate the parameters of a confirmatory factor analysis model as suggested by Nieser & Cochran (2021).
+This function uses the robust expectation maximization (REM) algorithm to estimate the parameters of a confirmatory factor analysis model as suggested by Nieser & Cochran (2023).
 }
 \examples{
 \donttest{
-# Creating latent model
+# CFA of Holzinger-Swineford dataset
 library(lavaan)
-library(GPArotation)
 df <- HolzingerSwineford1939
 data = df[,-c(1:6)]
 
 model <- "Visual  =~  x1 + x2 + x3
-         Textual =~  x4 + x5 + x6
-         Speed   =~  x7 + x8 + x9"
+          Textual =~  x4 + x5 + x6
+          Speed   =~  x7 + x8 + x9"
 
-# Modeling Confirmatory Factor Analysis
-model_CFA = REM_CFA(X = data, delta = 0.05, model = model)
+model_CFA = REM_CFA(X = data, model = model)
 summary(model_CFA)
 }
 }
 \references{
-Nieser, K. J., & Cochran, A. L. (2021). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological Methods.
+Nieser, K. J., & Cochran, A. L. (2023). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological methods, 28(1), 39.
 }
 \seealso{
 \code{\link[=REM_EFA]{REM_EFA()}}, \code{\link[=summary.REMLA]{summary.REMLA()}}

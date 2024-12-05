@@ -1,8 +1,8 @@
 Package: REMLA
 Title: Robust Expectation-Maximization Estimation for Latent Variable
         Models
-Version: 1.1
-Date: 2024-04-18
+Version: 1.2.0
+Date: 2024-11-30
 Authors@R: c(
     person("Bryan", "Ortiz-Torres", , "bortiztorres@wisc.edu", role = c("aut", "cre")),
     person("Kenneth", "Nieser", , "nieser@stanford.edu", role = "aut",
@@ -24,14 +24,14 @@ URL: https://github.com/knieser/REM
 Depends: R (>= 4.0), GPArotation,geex
 Imports: stats
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Suggests: knitr, lavaan, rmarkdown, testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-04-24 18:58:46 UTC; bryanortiz
+Packaged: 2024-12-05 19:46:34 UTC; bryanortiz
 Author: Bryan Ortiz-Torres [aut, cre],
   Kenneth Nieser [aut] (<https://orcid.org/0000-0001-6003-1296>)
 Maintainer: Bryan Ortiz-Torres <bortiztorres@wisc.edu>
 Repository: CRAN
-Date/Publication: 2024-05-11 19:03:14 UTC
+Date/Publication: 2024-12-05 20:50:02 UTC

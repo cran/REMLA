@@ -1,6 +1,6 @@
 #' Robust Estimation Maximization Estimates for Confirmatory Factor Analysis
 #' @description
-#' This function uses the robust expectation maximization (REM) algorithm to estimate the parameters of a confirmatory factor analysis model as suggested by Nieser & Cochran (2021).
+#' This function uses the robust expectation maximization (REM) algorithm to estimate the parameters of a confirmatory factor analysis model as suggested by Nieser & Cochran (2023).
 #' @param X data to analyze; should be a data frame or matrix
 #' @param delta hyperparameter between 0 and 1 that captures the researcher’s tolerance of incorrectly down-weighting data from the model (default = 0.05).
 #' @param model string variable that contains each structural equation in a new line where equalities are denoted by the symbol "~".
@@ -24,44 +24,43 @@
 #'  \item{lik}{joint log-likelihood evaluated at EM estimates}
 #'  \item{summary_table}{summary of EM and REM estimates, SEs, Z statistics, p-values, and 95% confidence intervals}
 #' @author Bryan Ortiz-Torres (bortiztorres@wisc.edu); Kenneth Nieser (nieser@stanford.edu)
-#' @references Nieser, K. J., & Cochran, A. L. (2021). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological Methods.
+#' @references Nieser, K. J., & Cochran, A. L. (2023). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological methods, 28(1), 39.
 #' @seealso [REM_EFA()], [summary.REMLA()]
 #' @examples
 #' \donttest{
-#' # Creating latent model
+#' # CFA of Holzinger-Swineford dataset
 #' library(lavaan)
-#' library(GPArotation)
 #' df <- HolzingerSwineford1939
 #' data = df[,-c(1:6)]
 #'
 #' model <- "Visual  =~  x1 + x2 + x3
-#'          Textual =~  x4 + x5 + x6
-#'          Speed   =~  x7 + x8 + x9"
+#'           Textual =~  x4 + x5 + x6
+#'           Speed   =~  x7 + x8 + x9"
 #'
-#' # Modeling Confirmatory Factor Analysis
-#' model_CFA = REM_CFA(X = data, delta = 0.05, model = model)
+#' model_CFA = REM_CFA(X = data, model = model)
 #' summary(model_CFA)
 #' }
-#' @importFrom stats factanal quantile rnorm varimax na.omit cov2cor pnorm
+#' @importFrom stats factanal quantile rnorm varimax na.omit cov2cor pnorm complete.cases
 #' @importFrom GPArotation oblimin
 #' @export
 REM_CFA <- function(X, delta = 0.05, model = NA, ctrREM = controlREM()){
 
-  if (any(is.na(X) == TRUE)) warning("rows with missing values were removed")
+  if (!all(sapply(X, is.numeric))) stop("The dataset should be entirely numeric.")
+  if(delta < 0 || delta > 1) stop("delta values should be between 0 and 1.")
+
+  n.missing <- sum(!complete.cases(X))
   X = na.omit(as.matrix(X))
+  if (n.missing > 0) warning(paste0(n.missing, " rows with missing values were removed."))
+
   n = nrow(X)
   p = ncol(X)
+  if (p < 3) stop("The dataset should include at least 3 variables.")
   order <- colnames(X)
 
   constraints <- constraints(model, order)
   rownames(constraints) <- NULL
   colnames(constraints) <- NULL
   k = ncol(constraints)
-
-  # error checking for constraints matrix
-  try(if(nrow(constraints) != p) stop(paste0("constraints should have p = ", p, " rows")))
-  try(if(ncol(constraints) != k) stop(paste0("constraints should have k = ", k, " columns")))
-  try(if(any(!(constraints %in% c(0,1)))) stop(paste0("constraints should only contain 0s and 1s")))
 
   string <- paste('CFA with', k, 'factors', '\n')
   message(string)

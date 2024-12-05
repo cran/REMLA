@@ -7,7 +7,6 @@ knitr::opts_chunk$set(
 
 ## ----setup--------------------------------------------------------------------
 library(REMLA)
-library(GPArotation)
 
 ## -----------------------------------------------------------------------------
 library(lavaan)
@@ -19,7 +18,7 @@ head(df)
 data = df[,-c(1:6)] 
 
 ## -----------------------------------------------------------------------------
-model_EFA = REM_EFA( X = data, k_range = 1:3, delta = 0.05)
+model_EFA = REM_EFA(X = data, k_range = 1:3)
 
 ## -----------------------------------------------------------------------------
 summary(model_EFA)
@@ -34,13 +33,13 @@ hist(model_EFA[[2]]$REM_output$weights,
 ## -----------------------------------------------------------------------------
 # Define your model as a string
 model <- " Visual =~ x1  +  x2  +  x3 
-          Textual =~ x4 + x5 + x6
-          Speed =~ x7 + x8 + x9
+           Textual =~ x4 + x5 + x6
+           Speed =~ x7 + x8 + x9
 "
 
 ## -----------------------------------------------------------------------------
 # CFA model with delta = 0.05
-model_CFA = REM_CFA(X = data,delta = 0.05,model = model)
+model_CFA = REM_CFA(X = data, model = model)
 
 ## -----------------------------------------------------------------------------
 summary(model_CFA)

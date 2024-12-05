@@ -18,8 +18,8 @@
 #'  \item{weights}{weights...}
 #'  \item{lik_rem}{joint log-likelihood evaluated at REM estimates}
 #'  \item{lik}{joint log-likelihood evaluated at EM estimates}
-#' @author Bryan Ortiz-Torres (bortiztorres@wisc.edu); Kenneth Nieser (nieser@wisc.edu)
-#' @references Nieser, K. J., & Cochran, A. L. (2021). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological Methods.
+#' @author Bryan Ortiz-Torres (bortiztorres@wisc.edu); Kenneth Nieser (nieser@stanford.edu)
+#' @references Nieser, K. J., & Cochran, A. L. (2023). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological methods, 28(1), 39.
 #' @importFrom stats factanal quantile rnorm varimax na.omit cov2cor pnorm
 #' @noRd
 
@@ -58,7 +58,7 @@ RobustEMAlg <- function(X, k, epsilon, constraints = NA, rotation, intl_mu, intl
     inv_V = solve(V)
     logdetV = log(det(V))
     Z = t(apply(X, 1, function(y) y - mu)) %*% inv_V
-    ind_lik = -(1/2)*(p*log(2*pi) + 2*logdetV + apply(Z, 1, function(y) t(y) %*% y))
+    ind_lik = -(1/2)*(p*log(2*pi) + 2*logdetV + apply(Z, 1, function(y) crossprod(y)))
 
     # calculate modified log-likelihoods
     ind_lik_rem = log(gamma*exp(ind_lik) + (1-gamma)*epsilon)

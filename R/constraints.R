@@ -4,19 +4,14 @@
 #' @param X numeric data frame containing all the variables needed in the factor analysis
 #' @param order original order of variables in the data frame
 #' @returns matrix of zeros and ones indicating the relationship that wants to be modeled
-#' @author Bryan Ortiz-Torres (bortiztorres@wisc.edu); Kenneth Nieser (nieser@wisc.edu)
-#' @references Nieser, K. J., & Cochran, A. L. (2021). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological Methods.
+#' @author Bryan Ortiz-Torres (bortiztorres@wisc.edu); Kenneth Nieser (nieser@stanford.edu)
+#' @references Nieser, K. J., & Cochran, A. L. (2023). Addressing heterogeneous populations in latent variable settings through robust estimation. Psychological methods, 28(1), 39.
 #' @noRd
 
 
 constraints <- function(X,order) {
 
-
-  # add condition to make matrix in the same order of variables as the original dataset. Rearrange the order at the end.
-  # add stop functions to make sure that model haves the same name of variables and add all of them in the model at least once.
-
   lines <- strsplit(X, "\n")[[1]]
-
   indicators <- list()
   latent_vars <- c()
 
@@ -29,8 +24,8 @@ constraints <- function(X,order) {
       latent_vars <- c(latent_vars, latent_var)
     }
   }
-
   unique_indicators <- unique(indicators)
+  if(length(unique_indicators) != length(order)) stop(paste0("The number of variables in the dataset (", length(order), ") does not match the number of variables in the model (", length(unique_indicators), ")."))
 
   matrix_data <- matrix(0, nrow = length(unique_indicators), ncol = length(latent_vars))
   rownames(matrix_data) <- unique_indicators
@@ -48,6 +43,9 @@ constraints <- function(X,order) {
       }
     }
   }
+
+  # re-order so that variables are in the same order as in the dataset
   matrix_data2 = matrix_data[order,]
-  return(matrix_data)
+
+  return(matrix_data2)
 }
